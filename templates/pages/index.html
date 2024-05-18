@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+<div class="container-fluid pb-3" >
+    {% include "partials/_alerts.html" %}
+    <div class="d-grid gap-3" style="grid-template-columns: 1fr 2fr;" >
+        <div class="bg-body-tertiary border rounded-3" >
+        <h2 class="headline-alert text-muted m-2">Human Prompt:</h2>
+        <form action="{% url 'index' %}" method="post" class="m-1">
+            {% bootstrap_form user_chat_from %}
+            {% csrf_token %}
+            {% bootstrap_button button_type="submit" content="ask question" %}
+            {% bootstrap_button button_type="reset" content="clear" %}
+        </form>
+        </div>
+        <div class="bg-body-tertiary border rounded-3" >
+        <h3 class="headline-alert text-muted m-2">Bot Response:</h3>
+        <p class="lead m-2">{{ response }}</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll("button.btn")
+        buttons.forEach((btn)=>{
+            if (btn.type == "reset") btn.classList.add("btn-danger")
+            else btn.classList.add("btn-success")
+        })
+    })
+</script>
+
+
+    
+{% endblock content %}

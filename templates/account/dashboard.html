@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h1>Profile</h1>
+<div>
+    {% include "partials/_alerts.html" %}
+
+    <hr>
+    <br>
+    your latest question: {{request.session.latest_question}}
+    <br>
+    <hr>
+    <div class="bg-body-tertiary border rounded-3" >
+        <h3 class="headline-alert text-muted m-2">your chat history: :</h3>
+        <p class="lead p-3">
+            {{history}}
+        </p>
+    </div>
+    <br>
+    <hr>
+    You can.
+    <form action="{% url 'logout' %}" method="post" class="d-inline">
+        {% csrf_token %}
+        {% bootstrap_button button_type="submit" content="logout" %}
+    </form>
+    <br>
+    <p class='headline-alert mt-2'>or you can <a href="{% url 'password_change' %}" class="btn btn-warning">change your password</a></p>
+
+    <p class='headline-alert mt-2'>
+        <form action="{% url 'delete_account' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_button button_type="submit" content="Delete account" %}
+        </form>
+    </p>
+</div>
+
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll("button.btn")
+        buttons.forEach((btn)=>{
+            btn.classList.remove("btn-primary")
+            if (btn.type == "reset") btn.classList.add("btn-danger")
+            else if (btn.textContent.includes("Delete")) btn.classList.add("btn-danger")
+            else btn.classList.add("btn-success")
+        })
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}Log-in{% endblock %}
+{% block content %}
+<h1>Log-in</h1>
+<p>Please, use the following form to log-in:</p>
+<form method="post">
+{% bootstrap_form form %}
+{% csrf_token %}
+{% bootstrap_button button_type="submit" content="login" %}
+</form>
+{% endblock %}

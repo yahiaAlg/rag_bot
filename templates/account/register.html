@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}Register{% endblock %}
+{% block content %}
+    <h1>Register</h1>
+    {% if form.errors %}
+        {% include "partials/_alerts.html"  %}
+    {% else %}
+        <p>Please, use the following form to log-in:</p>
+    {% endif %}
+    <div class="register-form">
+        <form action="{% url 'register' %}" method="post">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        {% bootstrap_button button_type="submit" content='submit' %}
+        {% bootstrap_button button_type="reset" content='clear' %}
+        </form>
+    </div>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll("button.btn")
+            buttons.forEach((btn)=>{
+                if (btn.type == "reset") btn.classList.add("btn-danger")
+                else btn.classList.add("btn-success")
+            })
+        })
+    </script>
+{% endblock %}
