@@ -4,6 +4,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv, find_dotenv
 from typing import List
 from django.conf import settings
+
 # from google.colab import userdata
 
 
@@ -255,7 +256,7 @@ def config_bot():
         delete_index()
         vector_store = insert_or_create_index("test-index", chunks)
         pprint(vector_store)
-        return True,chunks
+        return True, chunks
     except Exception as e:
         print(e)
-        return False,None
+        return False, None

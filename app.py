@@ -36,27 +36,35 @@ if __name__ == "__main__":
             # Load the model
             # Then, before you instantiate ChatGoogleGenerativeAI, call this function:
             get_or_create_eventloop()
-            llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0)  # type: ignore
-            # Create a prompt template
-            prompt = ChatPromptTemplate.from_messages([
-                MessagesPlaceholder(variable_name="chat_history"),
-                HumanMessagePromptTemplate.from_template(
-                    input_variables=["question"],
-                    template="Question: {question}\nAnswer: ",
-                ),
-            ])
+            llm = ChatGoogleGenerativeAI(model="gemini-pro") # type: ignore
 
-            # Create a chain
             memory = ConversationBufferMemory(
                 memory_key="chat_history",
-                chat_memory=FileChatMessageHistory("chat_history.json")
+                chat_memory=FileChatMessageHistory("chat_history.json"),
+                return_messages=True
             )
-            chain = LLMChain(llm=llm, prompt=prompt, memory=memory,verbose=True)
+
+            prompt = ChatPromptTemplate(
+                input_variables=["question"],
+                messages=[
+                    MessagesPlaceholder(variable_name="chat_history"),
+                    HumanMessagePromptTemplate.from_template(
+                        template="{question}"
+                    )
+                ]
+            )
+
+            chain = LLMChain(
+                llm=llm,
+                prompt=prompt,
+                memory=memory,
+                verbose=True
+            )
             st.session_state.chain_bot = chain
         # Run the Chain
         else:
             chain = st.session_state["chain_bot"]
-        answer = chain.run(question)  # type: ignore
+        answer = chain.run({"question":question})  # type: ignore
         # Display the result
         st.write("🤖 Answer:")
         st.write(f"{answer}")
